@@ -1,0 +1,52 @@
+import React, { useEffect, useState } from "react";
+import axios from "../../api/axios";
+
+const AdminDashboard = () => {
+  const [studentCount, setStudentCount] = useState(0);
+  const [teacherCount, setTeacherCount] = useState(0);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const studentRes = await axios.get("/students");
+      setStudentCount(studentRes.data.length || 0);
+
+      const teacherRes = await axios.get("/teachers");
+      setTeacherCount(teacherRes.data.length || 0);
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2 className="mb-4">📊 Admin Dashboard</h2>
+      <div className="row">
+        {/* Students Card */}
+        <div className="col-md-6 mb-4">
+          <div className="card text-white bg-primary shadow">
+            <div className="card-body">
+              <h5 className="card-title">Total Students</h5>
+              <p className="card-text fs-2">{studentCount}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Teachers Card */}
+        <div className="col-md-6 mb-4">
+          <div className="card text-white bg-success shadow">
+            <div className="card-body">
+              <h5 className="card-title">Total Teachers</h5>
+              <p className="card-text fs-2">{teacherCount}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;

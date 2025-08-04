@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
@@ -6,63 +6,45 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-    if (storedToken && storedUser) {
-      setToken(storedToken);
+    const token = localStorage.getItem("token");
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
   }, []);
 
   const login = async (email, password) => {
     try {
       const res = await axios.post("/login", { email, password });
-      const { token, user, role } = res.data;
+      const { token, user } = res.data;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({ ...user, role }));
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
 
-      setToken(token);
-      setUser({ ...user, role });
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+      const role = user.role || "user";
       navigate(`/${role}/dashboard`);
     } catch (err) {
-      alert("Invalid credentials");
-      throw err;
-    }
-  };
-
-  const register = async (formData) => {
-    try {
-      const res = await axios.post("/register", formData);
-      const { token, user, role } = res.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({ ...user, role }));
-
-      setToken(token);
-      setUser({ ...user, role });
-
-      navigate(`/${role}/dashboard`);
-    } catch (err) {
-      alert("Registration failed");
-      throw err;
+      const msg = err.response?.data?.error || "Login failed.";
+      alert(msg);
     }
   };
 
   const logout = () => {
     localStorage.clear();
     setUser(null);
-    setToken(null);
+    delete axios.defaults.headers.common['Authorization'];
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
