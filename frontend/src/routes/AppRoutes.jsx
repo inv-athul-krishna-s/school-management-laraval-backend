@@ -3,6 +3,7 @@ import PublicLayout from "../layouts/PublicLayout";
 import ProtectedLayout from "../layouts/ProtectedLayout";
 import DashboardLayout from "../layouts/AdminLayout";
 import TeacherDashboardLayout from "../layouts/TeacherDashboardLayout";
+import StudentDashboardLayout from "../layouts/StudentDashboardLayout";
 // Auth Pages
 import Login from "../pages/Login";
 // Admin Pages
@@ -21,6 +22,9 @@ import TeacherStudentList from "../pages/teacher/TeacherStudentList";
 import EditStudentByTeacher from "../pages/teacher/EditStudentByTeacher";
 import TeacherProfile from "../pages/teacher/TeacherProfile";
 
+// Student Pages
+import StudentDashboard from "../pages/student/StudentDashboard";
+import StudentProfile from "../pages/student/StudentProfile";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -71,23 +75,20 @@ const AppRoutes = () => {
         },
       ],
     },
-    // {
-    //   path: "/student",
-    //   element: <ProtectedLayout />,
-    //   children: [
-    //     {
-    //       path: "dashboard",
-    //       element: <StudentDashboardLayout />,
-    //       children: [
-    //         { path: "", element: <StudentDashboard /> },
-    //         { path: "profile", element: <StudentProfile /> },
-    //         { path: "results", element: <StudentResults /> },
-    //         { path: "exams", element: <AvailableExams /> },
-    //         { path: "exams/:id", element: <AttemptExam /> },
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      path: "/student",
+      element: <ProtectedLayout />,
+      children: [
+        {
+          path: "dashboard",
+          element: <StudentDashboardLayout />,
+          children: [
+            { path: "dashboard", element: <StudentDashboard /> },
+            { path: "profile", element: <StudentProfile /> },
+          ],
+        },
+      ],
+    },
   ]);
 
   return routes;
