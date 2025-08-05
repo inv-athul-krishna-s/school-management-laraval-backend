@@ -12,13 +12,21 @@ import {
   IconButton,
   Paper,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 
 const TeacherList = () => {
   const [teachers, setTeachers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +49,18 @@ const TeacherList = () => {
       fetchTeachers();
     } catch (err) {
       console.error("Failed to delete teacher", err);
+    }
+  };
+
+  const viewStudents = async (teacher) => {
+    try {
+      const res = await axios.get(`/teachers/${teacher.id}/students`);
+      setStudents(res.data);
+      setSelectedTeacher(teacher);
+      setOpenModal(true);
+    } catch (err) {
+      console.error("Failed to fetch students for teacher", err);
+      alert("Failed to load students.");
     }
   };
 
@@ -73,6 +93,9 @@ const TeacherList = () => {
                   <IconButton onClick={() => deleteTeacher(teacher.id)}>
                     <DeleteIcon />
                   </IconButton>
+                  <Button onClick={() => viewStudents(teacher)} size="small" sx={{ ml: 1 }}>
+                    View Students
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -87,6 +110,53 @@ const TeacherList = () => {
       >
         Add New Teacher
       </Button>
+
+      {/* Modal for Students */}
+      <Dialog open={openModal} fullWidth maxWidth="md" onClose={() => setOpenModal(false)}>
+        <DialogTitle>
+          Students under {selectedTeacher?.user.first_name} {selectedTeacher?.user.last_name}
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenModal(false)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          {students.length === 0 ? (
+            <Typography>No students assigned.</Typography>
+          ) : (
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Class</TableCell>
+                  <TableCell>Roll Number</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {students.map((stu, idx) => (
+                  <TableRow key={stu.id}>
+                    <TableCell>{idx + 1}</TableCell>
+                    <TableCell>{stu.user.name}</TableCell>
+                    <TableCell>{stu.user.email}</TableCell>
+                    <TableCell>{stu.student_class}</TableCell>
+                    <TableCell>{stu.roll_number}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenModal(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
