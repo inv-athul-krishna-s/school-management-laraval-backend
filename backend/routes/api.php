@@ -32,8 +32,6 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('teachers', TeacherController::class);
         Route::apiResource('students', StudentController::class);
-
-        // Admin: List students assigned to a specific teacher
         Route::get('/teachers/{id}/students', [TeacherController::class, 'students'])
             ->name('teachers.students');
     });
@@ -45,7 +43,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('my-students', [StudentController::class, 'myStudents']);
         Route::get('my-students/{id}', [StudentController::class, 'showAssigned']);
         Route::put('my-students/{id}', [StudentController::class, 'updateAssigned']);
-        Route::patch('my-students/{id}', [StudentController::class, 'updateAssigned']); // Add PATCH support
+        Route::patch('my-students/{id}', [StudentController::class, 'updateAssigned']); 
         Route::delete('my-students/{id}', [StudentController::class, 'destroyAssigned']);
         Route::post('my-students', [StudentController::class, 'storeAssigned']);
 

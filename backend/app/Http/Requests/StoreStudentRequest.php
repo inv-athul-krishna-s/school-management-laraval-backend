@@ -22,15 +22,20 @@ class StoreStudentRequest extends FormRequest
                 'first_name' => 'required|string|max:50',
                 'last_name' => 'required|string|max:50',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|min:3',
                 'phone_number' => 'required|string|max:20',
                 'roll_number' => 'required|string|unique:students,roll_number',
                 'student_class' => 'required|string|max:100',
                 'date_of_birth' => 'required|date',
                 'admission_date' => 'required|date',
                 'status' => 'required|in:active,inactive',
-                'assigned_teacher_id' => 'required|exists:teachers,id',
+                
             ];
+            if (auth()->user()->role === 'admin') {
+                $rules['assigned_teacher_id'] = 'required|exists:teachers,id';
+            } elseif (auth()->user()->role === 'teacher') {
+            $rules['assigned_teacher_id'] = 'prohibited';
+            }
         }
 
         if ($this->isMethod('put') || $this->isMethod('patch')) {

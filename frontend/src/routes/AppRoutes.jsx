@@ -2,6 +2,7 @@ import { useRoutes } from "react-router-dom";
 import PublicLayout from "../layouts/PublicLayout";
 import ProtectedLayout from "../layouts/ProtectedLayout";
 import DashboardLayout from "../layouts/AdminLayout";
+import TeacherDashboardLayout from "../layouts/TeacherDashboardLayout";
 // Auth Pages
 import Login from "../pages/Login";
 // Admin Pages
@@ -12,6 +13,13 @@ import StudentsList from "../pages/admin/StudentList";
 import EditTeacher from "../pages/admin/EditTeacher";
 import EditStudent from "../pages/admin/EditStudent";
 
+
+// Teacher Pages
+import TeacherDashboard from "../pages/teacher/TeacherDashboard";
+import RegisterStudent from "../pages/teacher/RegisterStudentByTeacher";
+import TeacherStudentList from "../pages/teacher/TeacherStudentList";
+import EditStudentByTeacher from "../pages/teacher/EditStudentByTeacher";
+import TeacherProfile from "../pages/teacher/TeacherProfile";
 
 
 import { useAuth } from "../context/AuthContext";
@@ -44,25 +52,25 @@ const AppRoutes = () => {
         },
       ],
     },
-    // {
-    //   path: "/teacher",
-    //   element: <ProtectedLayout />,
-    //   children: [
-    //     {
-    //       path: "dashboard",
-    //       element: <TeacherDashboardLayout />,
-    //       children: [
-    //         { path: "", element: <TeacherDashboard /> },
-    //         { path: "register-student", element: <RegisterStudent /> },
-    //         { path: "students", element: <TeacherStudentList /> },
-    //         { path: "students/:id/edit", element: <EditStudentByTeacher /> },
-    //         { path: "profile", element: <TeacherProfile /> },
+    {
+      path: "/teacher",
+      element: <ProtectedLayout />,
+      children: [
+        {
+          path: "dashboard",
+          element: <TeacherDashboardLayout />,
+          children: [
+            { path: "", element: <TeacherDashboard /> },
+            { path: "register-student", element: <RegisterStudent /> },
+            { path: "students", element: <TeacherStudentList /> },
+            { path: "students/:id/edit", element: <EditStudentByTeacher /> },
+            { path: "profile", element: <TeacherProfile /> },
 
 
-    //       ],
-    //     },
-    //   ],
-    // },
+          ],
+        },
+      ],
+    },
     // {
     //   path: "/student",
     //   element: <ProtectedLayout />,
