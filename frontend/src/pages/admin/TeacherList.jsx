@@ -28,7 +28,7 @@ const TeacherList = () => {
   const fetchTeachers = async () => {
     try {
       const res = await axios.get("/teachers");
-      setTeachers(res.data);
+      setTeachers(res.data.data);
     } catch (err) {
       console.error("Failed to fetch teachers", err);
     }
@@ -63,11 +63,11 @@ const TeacherList = () => {
           <TableBody>
             {teachers.map((teacher) => (
               <TableRow key={teacher.id}>
-                <TableCell>{teacher.name}</TableCell>
-                <TableCell>{teacher.email}</TableCell>
-                <TableCell>{teacher.phone}</TableCell>
+                <TableCell>{teacher.user?.name}</TableCell>
+                <TableCell>{teacher.user?.email}</TableCell>
+                <TableCell>{teacher.phone_number}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => navigate(`/admin/teachers/edit/${teacher.id}`)}>
+                  <IconButton onClick={() => navigate(`/admin/dashboard/teachers/edit-teacher/${teacher.id}`)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => deleteTeacher(teacher.id)}>

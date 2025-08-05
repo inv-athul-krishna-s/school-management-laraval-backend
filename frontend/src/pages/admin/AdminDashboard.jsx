@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../api/axios";
 
+import { useAuth } from "../../context/AuthContext";
+
 const AdminDashboard = () => {
+  const { token } = useAuth();
+
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
+  const [upcomingExamCount, setUpcomingExamCount] = useState(0);
 
   useEffect(() => {
     fetchDashboardData();
@@ -11,11 +16,25 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const studentRes = await axios.get("/students");
-      setStudentCount(studentRes.data.length || 0);
+      // Fetch students
+      const studentRes = await axios.get("/students/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const countStudents =
+        studentRes.data.total ||
+        studentRes.data.data?.length|
+        0;
+      setStudentCount(countStudents);
 
-      const teacherRes = await axios.get("/teachers");
-      setTeacherCount(teacherRes.data.length || 0);
+      // Fetch teachers
+      const teacherRes = await axios.get("/teachers/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const countTeachers =
+        teacherRes.data.total ||
+        teacherRes.data.data?.length ||
+        0;
+      setTeacherCount(countTeachers);
     } catch (error) {
       console.error("Error loading dashboard data:", error);
     }
@@ -23,10 +42,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">📊 Admin Dashboard</h2>
+      <h2 className="mb-4">Admin Dashboard</h2>
       <div className="row">
         {/* Students Card */}
-        <div className="col-md-6 mb-4">
+        <div className="col-md-4 mb-4">
           <div className="card text-white bg-primary shadow">
             <div className="card-body">
               <h5 className="card-title">Total Students</h5>
@@ -36,7 +55,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Teachers Card */}
-        <div className="col-md-6 mb-4">
+        <div className="col-md-4 mb-4">
           <div className="card text-white bg-success shadow">
             <div className="card-body">
               <h5 className="card-title">Total Teachers</h5>

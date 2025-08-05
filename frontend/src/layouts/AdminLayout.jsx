@@ -37,9 +37,9 @@ const AdminLayout = () => {
 
   const navItems = [
     { label: "🏠 Dashboard", path: "/admin/dashboard" },
-    { label: "👨‍🏫 Teachers", path: "/admin/teachers" },
-    { label: "👩‍🎓 Students", path: "/admin/students" },
-    { label: "➕ Register User", path: "/admin/register" },
+    { label: "👨‍🏫 Teachers", path: "/admin/dashboard/teachers" },
+    { label: "👩‍🎓 Students", path: "/admin/dashboard/students" },
+    { label: "➕ Register User", path: "/admin/dashboard/register" },
   ];
 
   const drawerContent = (
@@ -103,7 +103,7 @@ const AdminLayout = () => {
             </IconButton>
           )}
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Laravel School Admin Panel
+            School Management System 
           </Typography>
           {!isMobile && user?.name && (
             <Box sx={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>

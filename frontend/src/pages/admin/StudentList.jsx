@@ -28,7 +28,7 @@ const StudentList = () => {
   const fetchStudents = async () => {
     try {
       const res = await axios.get("/students");
-      setStudents(res.data);
+      setStudents(res.data.data);
     } catch (err) {
       console.error("Failed to fetch students", err);
     }
@@ -63,11 +63,11 @@ const StudentList = () => {
           <TableBody>
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell>{student.name}</TableCell>
-                <TableCell>{student.email}</TableCell>
-                <TableCell>{student.phone}</TableCell>
+                <TableCell>{student.user?.name}</TableCell>
+                <TableCell>{student.user?.email}</TableCell>
+                <TableCell>{student.phone_number}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => navigate(`/admin/students/edit/${student.id}`)}>
+                  <IconButton onClick={() => navigate(`/admin/dashboard/students/edit-student/${student.id}`)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => deleteStudent(student.id)}>
@@ -83,7 +83,7 @@ const StudentList = () => {
       <Button
         variant="contained"
         sx={{ mt: 2 }}
-        onClick={() => navigate("/admin/register?role=student")}
+        onClick={() => navigate("/admin/dashboard/register?role=student")}
       >
         Add New Student
       </Button>
