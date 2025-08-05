@@ -4,20 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    // User Registration
+    // User Registration (teacher or student only)
     public function register(Request $request)
     {
+        
+        if ($request->role === 'admin') {
+            return response()->json(['error' => 'Creating admin accounts is not allowed'], 403);
+        }
+
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role'     => 'required|in:admin,teacher,student'
+            'role'     => 'required|in:teacher,student'  // admin role not allowed here
         ]);
 
         $user = User::create([
@@ -37,33 +41,31 @@ class AuthController extends Controller
 
     // User Login
     public function login(Request $request)
-{
-    $credentials = $request->only('email', 'password');
+    {
+        $credentials = $request->only('email', 'password');
 
-    if (!$token = auth('api')->attempt($credentials)) {
-        \Log::error('Login failed', $credentials);  
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        if (!$token = auth()->attempt($credentials)) {
+            \Log::error('Login failed', $credentials);  
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        return response()->json([
+            'user'  => auth()->user(),
+            'role'  => auth()->user()->role,
+            'token' => $token
+        ]);
     }
 
-    return response()->json([
-        'user'  => auth('api')->user(),
-        'role'  => auth('api')->user()->role,
-        'token' => $token
-
-    ]);
-}
-
-    // User Logout
+    // User Logout (correct for JWT)
     public function logout()
     {
-        Auth::logout();
-
+        auth()->logout();  
         return response()->json(['message' => 'Successfully logged out']);
     }
 
     // Get Current User
     public function me()
     {
-        return response()->json(Auth::user());
+        return response()->json(auth()->user());  
     }
 }
