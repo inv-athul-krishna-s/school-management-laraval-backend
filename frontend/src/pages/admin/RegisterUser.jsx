@@ -50,12 +50,11 @@ const RegisterUser = () => {
 
   const onSubmit = async (data) => {
   try {
-    const { username, email, first_name, last_name, phone, password } = data;
+    const { email, first_name, last_name, phone, password } = data;
 
     // Build the payload in your format
     const userPayload = {
       user: {
-        username,
         email,
         first_name,
         last_name,
