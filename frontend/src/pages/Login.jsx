@@ -10,7 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import Logo from "../assets/logo.jpeg"; 
+import Logo from "../assets/logo.jpeg";   
 import BackgroundImg from "../assets/school.jpeg"; 
 
 const Login = () => {
@@ -67,7 +67,7 @@ const Login = () => {
           }}
         >
           <img
-            src={"assets/logo.jpeg"}
+            src={Logo}
             alt="Logo"
             style={{ width: 80, height: 80, marginBottom: 16 }}
           />
