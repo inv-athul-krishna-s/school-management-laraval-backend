@@ -8,7 +8,6 @@ const AdminDashboard = () => {
 
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
-  const [upcomingExamCount, setUpcomingExamCount] = useState(0);
 
   useEffect(() => {
     fetchDashboardData();

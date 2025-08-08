@@ -83,6 +83,7 @@ const AppRoutes = () => {
           path: "dashboard",
           element: <StudentDashboardLayout />,
           children: [
+            { index: true, element: <StudentDashboard /> },
             { path: "dashboard", element: <StudentDashboard /> },
             { path: "profile", element: <StudentProfile /> },
           ],

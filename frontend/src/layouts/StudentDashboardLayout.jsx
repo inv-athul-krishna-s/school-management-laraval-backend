@@ -42,7 +42,7 @@ const StudentDashboardLayout = () => {
   };
 
   const navItems = [
-    { text: "Dashboard", icon: <AssignmentIcon />, path: "dashboard" }, 
+    { text: "Dashboard", icon: <AssignmentIcon />, path: "dashboard" },
     { text: "Profile", icon: <PersonIcon />, path: "profile" },
     { text: "Logout", icon: <LogoutIcon />, action: handleLogout },
   ];

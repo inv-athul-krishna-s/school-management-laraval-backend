@@ -158,7 +158,7 @@ const RegisterUser = () => {
       {mode === "form" && (
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Shared Fields including password */}
-          {["username", "email", "first_name", "last_name", "phone", "password"].map((field) => (
+          {["email", "first_name", "last_name", "phone", "password"].map((field) => (
             <Controller
               key={field}
               name={field}
