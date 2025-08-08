@@ -67,7 +67,7 @@ const Login = () => {
           }}
         >
           <img
-            src={Logo}
+            src={"assets/logo.jpeg"}
             alt="Logo"
             style={{ width: 80, height: 80, marginBottom: 16 }}
           />
@@ -128,18 +128,7 @@ const Login = () => {
               LOGIN
             </Button>
 
-            <Box textAlign="right" mt={2}>
-              <Link
-                to="/forgot-password"
-                style={{
-                  textDecoration: "none",
-                  color: "#1976d2",
-                  fontSize: "0.9rem",
-                }}
-              >
-                Forgot Password?
-              </Link>
-            </Box>
+            
           </form>
         </Paper>
       </Slide>

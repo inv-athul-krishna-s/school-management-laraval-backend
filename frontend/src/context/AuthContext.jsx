@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accesstoken");
     if (storedUser && token) {
       setUser(JSON.parse(storedUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.post("/login", { email, password });
       const { token, user } = res.data;
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("accesstoken", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
 
