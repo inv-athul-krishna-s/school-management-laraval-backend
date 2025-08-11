@@ -19,7 +19,7 @@ class AuthController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role'     => 'required|in:teacher,student'  // admin role not allowed here
+            'role'     => 'required|in:teacher,student,admin'  // admin role not allowed here
         ]);
 
         if ($request->role === 'admin') {
