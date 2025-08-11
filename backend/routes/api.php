@@ -8,6 +8,7 @@ use App\Http\Controllers\TeacherController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
 
 // Authenticated routes
 Route::middleware('auth:api')->group(function () {
@@ -17,14 +18,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Role-based Dashboard Routes
-    Route::get('/admin/dashboard', fn () => response()->json(['message' => 'Welcome, Admin']))
-        ->middleware('role:admin');
+    // Route::get('/admin/dashboard', fn () => response()->json(['message' => 'Welcome, Admin']))
+    //     ->middleware('role:admin');
 
-    Route::get('/teacher/dashboard', fn () => response()->json(['message' => 'Welcome, Teacher']))
-        ->middleware('role:teacher');
+    // Route::get('/teacher/dashboard', fn () => response()->json(['message' => 'Welcome, Teacher']))
+    //     ->middleware('role:teacher');
 
-    Route::get('/student/dashboard', fn () => response()->json(['message' => 'Welcome, Student']))
-        ->middleware('role:student');
+    // Route::get('/student/dashboard', fn () => response()->json(['message' => 'Welcome, Student']))
+    //     ->middleware('role:student');
 
     // ========================
     // Admin Routes

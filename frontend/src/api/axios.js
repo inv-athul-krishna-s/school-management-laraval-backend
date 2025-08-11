@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+//create an axios instance with a base URL
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
@@ -17,34 +17,31 @@ error => {
 
 });
 
+// Add a response interceptor to handle token refresh
 
 instance.interceptors.response.use(
-  (response) => response,
+  response => response,
   async (error) => {
-    if (
-      error.response?.status === 401 &&
-      localStorage.getItem("refreshtoken")
-    ) {
-      console.log("Access token expired, attempting refresh...");
-      error.config._retry = true;
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
-        const res = await axios.post("http://localhost:8000/api/refresh-token", null, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("refreshtoken")}`,
-          },
-        });
+        const refreshRes = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/refresh-token`,
+          {},
+          { headers: { Authorization: `Bearer ${localStorage.getItem('accesstoken')}` } }
+        );
 
-        console.log("Refresh successful");
+        const newAccessToken = refreshRes.data.access_token;
+        localStorage.setItem('accesstoken', newAccessToken);
 
-        const newAccessToken = res.data.access_token;
-        localStorage.setItem("accesstoken", newAccessToken);
-
-        error.config.headers.Authorization = `Bearer ${newAccessToken}`;
-        return instance(error.config);
-      } catch (refreshError) {
-        console.error("Refresh failed:", refreshError.response?.data || refreshError.message);
-        localStorage.removeItem("accesstoken");
-        localStorage.removeItem("refreshtoken");
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return instance(originalRequest);
+      } catch (err) {
+        console.error("Refresh failed:", err);
+        localStorage.clear();
         window.location.href = "/login";
       }
     }

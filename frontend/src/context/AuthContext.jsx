@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,20 +16,25 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
+    setLoading(false);
   }, []);
-
   const login = async (email, password) => {
     try {
       const res = await axios.post("/login", { email, password });
-      const { token, user } = res.data;
+      
 
-      localStorage.setItem("accesstoken", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      const accessToken = res.data.access_token;
+      const refreshToken = res.data.refresh_token;
+      const userData = res.data.user;
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      localStorage.setItem("accesstoken", accessToken);
+      localStorage.setItem("refreshtoken", refreshToken);
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
 
-      const role = user.role || "user";
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+      const role = userData.role || "user";
       navigate(`/${role}/dashboard`);
     } catch (err) {
       const msg = err.response?.data?.error || "Login failed.";
