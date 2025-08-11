@@ -16,10 +16,11 @@ class AuthController extends Controller
        
 
         $request->validate([
-            'name'     => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role'     => 'required|in:teacher,student,admin'  // admin role not allowed here
+            'role'     => 'required|in:teacher,student,admin'  // Ensure role is either teacher, student, or admin
         ]);
 
         if ($request->role === 'admin') {
