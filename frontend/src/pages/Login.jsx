@@ -11,14 +11,22 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.jpeg";   
+import { useNavigate } from "react-router-dom";
 import BackgroundImg from "../assets/school.jpeg"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
+
+   useEffect(() => {
+    if (user) {
+      navigate(`/${user.role}/dashboard`);
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

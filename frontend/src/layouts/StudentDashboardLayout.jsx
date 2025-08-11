@@ -20,8 +20,8 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import AssessmentIcon from "@mui/icons-material/Assessment";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 const drawerWidth = 240;
@@ -34,17 +34,17 @@ const StudentDashboardLayout = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    navigate("/login");
-  };
+  const { user, logout } = useAuth();
+
 
   const navItems = [
     { text: "Dashboard", icon: <AssignmentIcon />, path: "dashboard" },
     { text: "Profile", icon: <PersonIcon />, path: "profile" },
-    { text: "Logout", icon: <LogoutIcon />, action: handleLogout },
+    { text: "Logout", icon: <LogoutIcon />, action: logout },
+
+    
+
+    
   ];
 
   const drawer = (
